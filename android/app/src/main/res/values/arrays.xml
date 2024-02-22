@@ -1,0 +1,7 @@
+<resources>
+    <array name="health_permissions">
+        <!-- Add health-related permissions as needed -->
+        <item>android.permission.health.READ_STEPS</item>
+        <!-- Add other health-related permissions as needed -->
+    </array>
+</resources>

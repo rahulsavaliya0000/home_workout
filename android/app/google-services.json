@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "402197539522",
+    "firebase_url": "https://homeworkout-7fe50-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "homeworkout-7fe50",
+    "storage_bucket": "homeworkout-7fe50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402197539522:android:da986062bc62fd5638295b",
+        "android_client_info": {
+          "package_name": "com.example.home_workout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402197539522-2rst8e8tn5bhl2ar9gt88e6hc2ukkknv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.home_workout",
+            "certificate_hash": "c5dfa3b444a2c4a119c12817fea50e65bb81084d"
+          }
+        },
+        {
+          "client_id": "402197539522-ma62i09059ujjeh69anoglsakbbpfmeb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl-1vwZB11CpZAz5hwhh57X93xLQLU_KM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402197539522-ma62i09059ujjeh69anoglsakbbpfmeb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
