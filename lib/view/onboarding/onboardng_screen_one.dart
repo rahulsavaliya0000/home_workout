@@ -17,10 +17,10 @@ class _onboarding_screen_oneState extends State<onboarding_screen_one> {
   void changeImage() async {
     if (mounted) {
       setState(() {
-        imageCounter = (imageCounter + 1) % 4; // Cycle through 0 to 3
+        imageCounter = (imageCounter + 1) % 3; // Cycle through 0 to 3
       });
 
-      if (imageCounter == 3) {
+      if (imageCounter == 2) {
         // Delay for 1 second before navigating to the next screen
         await Future.delayed(Duration(seconds: 1));
 

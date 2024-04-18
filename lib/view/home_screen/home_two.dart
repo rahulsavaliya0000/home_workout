@@ -386,6 +386,7 @@ class _Home_screenState extends State<Home_screen> with TickerProviderStateMixin
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Provider.of<ThemeProvider>(context).isDarkMode
                   ? Colors.black // Dark mode color
                   : Colors.white,

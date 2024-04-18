@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +17,10 @@ import 'package:home_workout/view/home_screen/profile_screen/notifications.dart'
 import 'package:home_workout/view/setting_ui/privacy.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
-import 'package:super_circle/super_circle.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -161,13 +164,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _signOut(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
+      // Create a Completer to handle the result of the dialog
+      Completer<bool> completer = Completer<bool>();
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const CreateAccountPage()),
-        (route) => false,
+      // Show a confirmation dialog
+      Dialogs.bottomMaterialDialog(
+        msg: 'Are you sure you want to log out? You can\'t undo this action.',
+        msgStyle: TextStyle(
+            color: AppColor.blueColor,
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w700,
+            fontSize: 15),
+        title: 'Logout',
+        titleStyle: TextStyle(
+                              color:AppColor.redColor,
+                              fontFamily: 'Quicksand',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 19),
+        context: context,
+        actions: [
+          IconsOutlineButton(
+            onPressed: () {
+              completer.complete(
+                  false); // Complete with 'false' when Cancel is pressed
+              Navigator.of(context).pop();
+            },
+            text: 'Cancel',
+            iconData: Icons.cancel_outlined,
+            textStyle: TextStyle(color: Colors.grey),
+            iconColor: Colors.grey,
+          ),
+          IconsButton(
+            onPressed: () async {
+              completer.complete(
+                  true); // Complete with 'true' when Logout is pressed
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateAccountPage()),
+                (route) => false,
+              );
+            },
+            text: 'Logout',
+            iconData: Icons.exit_to_app,
+            color: Colors.blue,
+            textStyle: TextStyle(color: Colors.white),
+            iconColor: Colors.white,
+          ),
+        ],
       );
+
+      // Wait for the user's decision
+      bool result = await completer.future;
+
+      // If the user confirms the logout, result will be true
+      if (result == true) {
+        // Perform the logout
+        await FirebaseAuth.instance.signOut();
+
+        // Navigate to the CreateAccountPage and remove all previous routes
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const CreateAccountPage()),
+          (route) => false,
+        );
+      }
     } catch (error) {
       print('Error signing out: $error');
     }
@@ -224,7 +286,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _isLoading = false;
       });
     }
-  } bool refreshing = false;
+  }
+
+  bool refreshing = false;
 
   // Simulating some data fetching
   Future<void> _refreshData() async {
@@ -249,10 +313,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
           body: RefreshIndicator(
-            onRefresh: _refreshData,
-            child: SingleChildScrollView(
-               
-                    child: Center(
+        onRefresh: _refreshData,
+        child: SingleChildScrollView(
+          child: Center(
             child: Column(
               children: [
                 const SizedBox(
@@ -306,7 +369,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           Brightness.dark
                                       ? ThemeMode.dark
                                       : ThemeMode.light;
-            
+
                               return TextButton(
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
@@ -315,11 +378,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 onPressed: () {
                                   context.read<ThemeProvider>().toggleTheme();
                                 },
-                                child: Icon(themeProvider.isDarkMode? Icons.wb_sunny:Icons.nightlight_round_outlined,
-                                                           
-                                    color: themeProvider.isDarkMode ?Colors.white:Colors.black.withOpacity(0.9),
-                                      key: ValueKey<ThemeMode>(
-                                      themeMode),                                ),
+                                child: Icon(
+                                  themeProvider.isDarkMode
+                                      ? Icons.wb_sunny
+                                      : Icons.nightlight_round_outlined,
+                                  color: themeProvider.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black.withOpacity(0.9),
+                                  key: ValueKey<ThemeMode>(themeMode),
+                                ),
                               );
                             },
                           ),
@@ -350,8 +417,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ? Center(
                                         child: Text(
                                           _errorMessage,
-                                          style:
-                                              const TextStyle(color: Colors.red),
+                                          style: const TextStyle(
+                                              color: Colors.red),
                                         ),
                                       )
                                     : CircleAvatar(
@@ -442,10 +509,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       ListTile(
-                        title:  Text(
+                        title: Text(
                           'Privacy',
                           style: TextStyle(
-                              color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,
+                              color: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : AppColor.blueColor,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                               fontSize: 19),
@@ -463,8 +532,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: Text(
                           'Calorie Calculator',
                           style: TextStyle(
-                             color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,
-
+                              color: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : AppColor.blueColor,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                               fontSize: 19),
@@ -474,7 +544,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context,
                             MaterialPageRoute(
                                 // builder: (context) => StepDashboard()),
-                                builder: (context) => CalorieCalculatorScreen()),
+                                builder: (context) =>
+                                    CalorieCalculatorScreen()),
                           );
                         },
                       ),
@@ -483,23 +554,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: Text(
                           'FAQ',
                           style: TextStyle(
-color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,                     fontFamily: 'Quicksand',
+                              color: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : AppColor.blueColor,
+                              fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                               fontSize: 19),
                         ),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => FAQScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => FAQScreen()),
                           );
                         },
                       ),
                       const Divider(color: Colors.black),
                       ListTile(
-                        title:  Text(
+                        title: Text(
                           'Notifications',
                           style: TextStyle(
-                              color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,fontFamily: 'Quicksand',
+                              color: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : AppColor.blueColor,
+                              fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                               fontSize: 19),
                         ),
@@ -513,11 +591,12 @@ color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,               
                       ),
                       const Divider(color: Colors.black),
                       ListTile(
-                        title:  Text(
+                        title: Text(
                           'Invite a Friend',
                           style: TextStyle(
-                             color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,
-
+                              color: themeProvider.isDarkMode
+                                  ? Colors.black
+                                  : AppColor.blueColor,
                               fontFamily: 'Quicksand',
                               fontWeight: FontWeight.w700,
                               fontSize: 19),
@@ -535,8 +614,9 @@ color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,               
                           title: Text(
                             'Logout',
                             style: TextStyle(
-                                                              color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,
-
+                                color: themeProvider.isDarkMode
+                                    ? Colors.black
+                                    : AppColor.blueColor,
                                 fontFamily: 'Quicksand',
                                 fontWeight: FontWeight.w700,
                                 fontSize: 19),
@@ -549,9 +629,9 @@ color: themeProvider.isDarkMode? Colors.black:AppColor.blueColor,               
                 ),
               ],
             ),
-                    ),
-                  ),
-          )),
+          ),
+        ),
+      )),
     );
   }
 }

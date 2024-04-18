@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:home_workout/constants/colors/app_color.dart';
-// ignore: constant_identifier_names
 enum ViewState { Idle, Busy, Error, Success }
 
 void showMessage(BuildContext context, String message) {

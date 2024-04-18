@@ -27,7 +27,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   fluttertoast: ^8.2.4
   get: ^4.6.6
-  device_preview: ^1.1.0
   animated_weight_picker: ^1.0.3
   google_fonts: ^6.1.0
   firebase_core: ^2.25.4
@@ -58,21 +57,21 @@ dependencies:
   image_cropper: ^5.0.1
   intl: ^0.18.1
   shared_preferences: ^2.2.2
-  dash_chat_2: ^0.0.19
-  http: ^1.2.0
   timezone: ^0.9.2
   awesome_notifications: ^0.8.2
   share_plus: ^7.2.2
   firebase_dynamic_links: ^5.4.11
   google_sign_in: ^5.0.0
   permission_handler: ^11.2.0
-  health: ^9.0.0
   animated_icon: ^0.0.5
   animated_icon_button: ^1.0.2
   pull_to_refresh: ^2.0.0
   confetti: ^0.7.0
   audioplayers: ^5.2.1
-  super_circle: ^1.0.0
+  dash_chat_2: ^0.0.20
+  material_dialogs: ^1.1.4
+  model_viewer_plus: ^1.7.0
+  o3d: ^3.1.0
 
 dependency_overrides: 
   intl: 0.18.1

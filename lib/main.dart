@@ -1,6 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:device_preview/device_preview.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,16 +17,16 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-        channelKey: "basic_channel",
-        channelName: "Basic Notifications",
-        channelDescription: "Test Notifications",
-        channelGroupKey: 'Basic_channel_group')
-  ], channelGroups: [
-    NotificationChannelGroup(
-        channelGroupKey: "Basic_channel_group", channelGroupName: "Basic Group")
-  ]);
+    await AwesomeNotifications().initialize(null, [
+      NotificationChannel(
+          channelKey: "basic_channel",
+          channelName: "Basic Notifications",
+          channelDescription: "Test Notifications",
+          channelGroupKey: 'Basic_channel_group')
+    ], channelGroups: [
+      NotificationChannelGroup(
+          channelGroupKey: "Basic_channel_group", channelGroupName: "Basic Group")
+    ]);
 
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -37,23 +37,17 @@ void main() async {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
-  runApp(DevicePreview(
-    enabled: true,
-    tools: const [
-      ...DevicePreview.defaultTools,
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => FitnessLevelProvider()),
+      ChangeNotifierProvider(create: (context) => Auth_Provider()),
+      ChangeNotifierProvider(create: (context) => RefProvider()),
+      ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        lazy: false,
+      ),
     ],
-    builder: (context) => MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => FitnessLevelProvider()),
-        ChangeNotifierProvider(create: (context) => Auth_Provider()),
-        ChangeNotifierProvider(create: (context) => RefProvider()),
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
-          lazy: false,
-        ),
-      ],
-      child: MyApp(),
-    ),
+    child: MyApp(),
   ));
 }
 

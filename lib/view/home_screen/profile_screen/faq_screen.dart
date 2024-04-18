@@ -170,6 +170,7 @@ class FAQCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       margin: EdgeInsets.all(12.0),
       color: Colors.white,
+
       child: ExpansionTile(
         leading: Icon(
           Icons.help_outline,
@@ -183,6 +184,7 @@ class FAQCard extends StatelessWidget {
             ),
           ],
           semanticLabel: 'Help Icon',
+          
           textDirection: TextDirection.ltr,
         ),
         title: Text(
